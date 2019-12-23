@@ -3,6 +3,8 @@ package com.fiwan.qrgenerator;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
+import java.awt.font.FontRenderContext;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -263,7 +265,7 @@ public class ZxingHandler {
 	}
 
 	public static void createPDFQRCodeForPAHW(File file, String content, String title) {
-		Font font = new Font("微软雅黑", Font.PLAIN, 5);
+		Font font = new Font("宋体", Font.PLAIN, 5);
 		// 设置二维码的大小 默认是300px
 		int qrcodeSize = 21;
 		// 每格大小
@@ -271,9 +273,16 @@ public class ZxingHandler {
 		int totalWidth = 40;
 		int totalHeight = 40;
 
-		FontMetrics fm = new JLabel().getFontMetrics(font);
+		AffineTransform affinetransform = new AffineTransform();
+		FontRenderContext frc = new FontRenderContext(affinetransform, true, true);
+		int titleWidth = (int) (font.getStringBounds(title, frc).getWidth());
+		int textHeight = (int) (font.getStringBounds(title, frc).getHeight());
+		
+//		FontMetrics fm = new JLabel().getFontMetrics(font);
+//		int titleWidth = fm.stringWidth(title);
+		
 		int titleHeight = 5;
-		int titleWidth = fm.stringWidth(title);
+		
 		try {
 			BitMatrix bitMatrix = GetBitMatrixForPAHW(content, qrcodeSize, qrcodeSize, ErrorCorrectionLevel.L);
 
@@ -293,7 +302,7 @@ public class ZxingHandler {
 			e.printStackTrace();
 		}
 	}
-
+	
 	public static void createSVGQRCode(Settings setting, File file, String content) {
 		double point_x = 0;
 		double point_y = 0;

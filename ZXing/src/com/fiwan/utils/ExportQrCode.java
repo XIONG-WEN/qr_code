@@ -189,8 +189,7 @@ public class ExportQrCode {
 		int spacing = 0;
 		int startY = (totalHeight - height * blockSize - titleHeight - spacing) / 2;
 
-		float left = 1000;
-		float right = 0;
+		float left = (totalWidth - width * blockSize) / 2f;
 		
 		if (true) {
 			for (int x = 0; x < width; x++) {
@@ -198,15 +197,14 @@ public class ExportQrCode {
 				for (int y = 0; y < height; y++) {
 					if (bitMatrix.get(x, y)) {
 						float theY = y * blockSize + startY;
-						left = Math.min(left, theX);
-						right = Math.max(right, theX);
 						g.fill(new Rectangle2D.Double(theX, theY, blockSize, blockSize));
 					}
 				}
 			}
 			
-			float txtLeft = left + ((right - left) - titleWidth) / 2f;
+			float txtLeft = left + (width * blockSize - titleWidth) / 2f;
 			g.drawString(title, txtLeft, startY + height * blockSize + titleHeight + spacing);
+//			g.drawLine((int)left, startY, (int)right, startY);
 		}
 	}
 

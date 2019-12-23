@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
+import java.awt.GraphicsEnvironment;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
@@ -245,6 +246,17 @@ public class QrCodeUtil {
 	}
 
 	/**
+	 * 查看系统支持的字体
+	 */
+	public static void printFont() {
+		GraphicsEnvironment e = GraphicsEnvironment.getLocalGraphicsEnvironment(); //返回本地 GraphicsEnvironment 。
+	    String [] forName = e.getAvailableFontFamilyNames(); //返回包含在此所有字体系列名称的数组， GraphicsEnvironment本地化为默认的语言环境，如返回 Locale.getDefault() 。 
+	    for (int i = 0; i < forName.length; i++) {
+	        System.out.println(forName[i]);
+	    }
+	}
+	
+	/**
 	 * 测试代码
 	 * 
 	 * @throws IOException
@@ -253,7 +265,8 @@ public class QrCodeUtil {
 	 */
 	public static void main(String[] args) {
 		// bikeCode(); //bike二维码生成器
-		PAHWCode();
+//		PAHWCode();
+		YJCode();
 	}
 
 	private static void bikeCode() {
@@ -357,6 +370,64 @@ public class QrCodeUtil {
 			String localId = fileName.replace(".pdf", "");
 
 			File out = new File("D:\\code\\PAHWCode\\check", localId + ".bmp");
+			if (out.exists()) {
+				out.delete();
+			}
+			out.createNewFile();
+			PDF2Image.pdfToImage(item.getAbsolutePath(), out.getAbsolutePath());
+
+			String readQrCode = readQrCode(new FileInputStream(out));
+			String readId = readQrCode.substring(readQrCode.lastIndexOf("/") + 1);
+			if (localId.equals(readId)) {
+				success++;
+				out.delete();
+			} else {
+				fail++;
+				System.out.println("id不一致:(" + localId + "), (" + readId + ")");
+			}
+		}
+		System.out.println("检查完毕");
+		System.out.println("总数量:" + listFiles.length + ", 成功:" + success + ", 失败:" + fail);
+	}
+	
+	private static void YJCode() {
+		try {
+			String baseDir = "D:\\code\\YJCode";
+			new File(baseDir, "qrcode").mkdirs();
+			new File(baseDir, "check").mkdirs();
+			// 创建
+			createYJCode(baseDir);
+			// 检查
+			checkCode(baseDir);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private static void createYJCode(String baseDir) throws Exception {
+		for(int i = 1; i <= 400; i++) {
+			String url;
+			if (i < 10) {
+				url = "YJ00000" + i;
+			} else if (i < 100) {
+				url = "YJ0000" + i;
+			} else {
+				url = "YJ000" + i;
+			}
+			ZxingHandler.createPDFQRCodeForPAHW(new File(baseDir, "qrcode\\" + url + ".pdf"), url, url);
+		}
+	}
+	
+	private static void checkCode(String baseDir) throws Exception {
+		File file = new File(baseDir, "qrcode");
+		File[] listFiles = file.listFiles();
+		int success = 0;
+		int fail = 0;
+		for (File item : listFiles) {
+			String fileName = item.getName();
+			String localId = fileName.replace(".pdf", "");
+
+			File out = new File(baseDir, "check\\" + localId + ".bmp");
 			if (out.exists()) {
 				out.delete();
 			}
