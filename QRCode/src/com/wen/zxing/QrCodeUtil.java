@@ -9,6 +9,7 @@ import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
@@ -44,16 +45,13 @@ public class QrCodeUtil {
 	/**
 	 * 生成包含字符串信息的二维码图片
 	 * 
-	 * @param outputStream
-	 *            文件输出流路径
-	 * @param content
-	 *            二维码携带信息
-	 * @param qrCodeSize
-	 *            二维码图片大小
-	 * @param imageFormat
-	 *            二维码的格式
+	 * @param outputStream 文件输出流路径
+	 * @param content      二维码携带信息
+	 * @param qrCodeSize   二维码图片大小
+	 * @param imageFormat  二维码的格式
 	 */
-	public static boolean createQrCode(String filePath, String content, String title, int qrCodeSize, String imageFormat) {
+	public static boolean createQrCode(String filePath, String content, String title, int qrCodeSize,
+			String imageFormat) {
 		try {
 			// 设置二维码纠错级别ＭＡＰ
 			Hashtable hintMap = new Hashtable();
@@ -104,12 +102,9 @@ public class QrCodeUtil {
 	/**
 	 * 生成包含字符串信息的二维码图片
 	 * 
-	 * @param outputStream
-	 *            文件输出流路径
-	 * @param content
-	 *            二维码携带信息
-	 * @param qrCodeSize
-	 *            二维码图片大小
+	 * @param outputStream 文件输出流路径
+	 * @param content      二维码携带信息
+	 * @param qrCodeSize   二维码图片大小
 	 */
 	// public static boolean createQrCodePdf(String filePath, String content,
 	// String title, int qrCodeSize) {
@@ -165,12 +160,9 @@ public class QrCodeUtil {
 	/**
 	 * 生成包含字符串信息的二维码图片
 	 * 
-	 * @param outputStream
-	 *            文件输出流路径
-	 * @param content
-	 *            二维码携带信息
-	 * @param qrCodeSize
-	 *            二维码图片大小
+	 * @param outputStream 文件输出流路径
+	 * @param content      二维码携带信息
+	 * @param qrCodeSize   二维码图片大小
 	 */
 	// public static boolean createQrCodeSvg(String filePath, String content,
 	// String title, int qrCodeSize) {
@@ -249,13 +241,14 @@ public class QrCodeUtil {
 	 * 查看系统支持的字体
 	 */
 	public static void printFont() {
-		GraphicsEnvironment e = GraphicsEnvironment.getLocalGraphicsEnvironment(); //返回本地 GraphicsEnvironment 。
-	    String [] forName = e.getAvailableFontFamilyNames(); //返回包含在此所有字体系列名称的数组， GraphicsEnvironment本地化为默认的语言环境，如返回 Locale.getDefault() 。 
-	    for (int i = 0; i < forName.length; i++) {
-	        System.out.println(forName[i]);
-	    }
+		GraphicsEnvironment e = GraphicsEnvironment.getLocalGraphicsEnvironment(); // 返回本地 GraphicsEnvironment 。
+		String[] forName = e.getAvailableFontFamilyNames(); // 返回包含在此所有字体系列名称的数组， GraphicsEnvironment本地化为默认的语言环境，如返回
+															// Locale.getDefault() 。
+		for (int i = 0; i < forName.length; i++) {
+			System.out.println(forName[i]);
+		}
 	}
-	
+
 	/**
 	 * 测试代码
 	 * 
@@ -265,8 +258,9 @@ public class QrCodeUtil {
 	 */
 	public static void main(String[] args) {
 		// bikeCode(); //bike二维码生成器
-//		PAHWCode();
-		YJCode();
+		// PAHWCode();
+		// YJCode();
+		ZCCode();
 	}
 
 	private static void bikeCode() {
@@ -320,7 +314,7 @@ public class QrCodeUtil {
 		System.out.println("检查完毕");
 		System.out.println("总数量:" + listFiles.length + ", 成功:" + success + ", 失败:" + fail);
 	}
-	
+
 	private static void PAHWCode() {
 		try {
 			// 创建
@@ -333,7 +327,7 @@ public class QrCodeUtil {
 	}
 
 	private static void createPAHWCode() throws Exception {
-		for(int i = 1; i <= 200; i++) {
+		for (int i = 1; i <= 200; i++) {
 			String url;
 			if (i < 10) {
 				url = "BU6ZMJ0000" + i;
@@ -343,23 +337,23 @@ public class QrCodeUtil {
 				url = "BU6ZMJ00" + i;
 			}
 			String path = "D:\\code\\PAHWCode\\qrcode\\" + url + ".pdf";
-			ZxingHandler.createPDFQRCodeForPAHW(new File(path), url, url);
+			ZxingHandler.createPDFQRCodeNew(new File(path), url, url);
 		}
-		
-		/*BufferedReader br = new BufferedReader(new FileReader(new File("D:\\code\\PAHWCode\\code.txt")));
-		String url;
-		while ((url = br.readLine()) != null) {
-			String path = "D:\\code\\PAHWCode\\qrcode\\" + url + ".pdf";
-			ZxingHandler.createPDFQRCodeForPAHW(new File(path), url, url);
-		}
-		br.close();*/
-		
-//		String url = "CIS021018";
-//		String url = "BMD011005";
-//		String path = "D:\\code\\PAHWCode\\qrcode\\" + url + ".pdf";
-//		ZxingHandler.createPDFQRCodeForPAHW(new File(path), url, url);
+
+		/*
+		 * BufferedReader br = new BufferedReader(new FileReader(new
+		 * File("D:\\code\\PAHWCode\\code.txt"))); String url; while ((url =
+		 * br.readLine()) != null) { String path =
+		 * "D:\\code\\PAHWCode\\qrcode\\" + url + ".pdf";
+		 * ZxingHandler.createPDFQRCodeForPAHW(new File(path), url, url); } br.close();
+		 */
+
+		// String url = "CIS021018";
+		// String url = "BMD011005";
+		// String path = "D:\\code\\PAHWCode\\qrcode\\" + url + ".pdf";
+		// ZxingHandler.createPDFQRCodeForPAHW(new File(path), url, url);
 	}
-	
+
 	private static void checkPAHWCode() throws Exception {
 		File file = new File("D:\\code\\PAHWCode\\qrcode");
 		File[] listFiles = file.listFiles();
@@ -389,7 +383,7 @@ public class QrCodeUtil {
 		System.out.println("检查完毕");
 		System.out.println("总数量:" + listFiles.length + ", 成功:" + success + ", 失败:" + fail);
 	}
-	
+
 	private static void YJCode() {
 		try {
 			String baseDir = "D:\\code\\YJCode";
@@ -403,9 +397,9 @@ public class QrCodeUtil {
 			e.printStackTrace();
 		}
 	}
-	
+
 	private static void createYJCode(String baseDir) throws Exception {
-		for(int i = 1; i <= 400; i++) {
+		for (int i = 1; i <= 400; i++) {
 			String url;
 			if (i < 10) {
 				url = "YJ00000" + i;
@@ -414,10 +408,10 @@ public class QrCodeUtil {
 			} else {
 				url = "YJ000" + i;
 			}
-			ZxingHandler.createPDFQRCodeForPAHW(new File(baseDir, "qrcode\\" + url + ".pdf"), url, url);
+			ZxingHandler.createPDFQRCodeNew(new File(baseDir, "qrcode\\" + url + ".pdf"), url, url);
 		}
 	}
-	
+
 	private static void checkCode(String baseDir) throws Exception {
 		File file = new File(baseDir, "qrcode");
 		File[] listFiles = file.listFiles();
@@ -447,5 +441,65 @@ public class QrCodeUtil {
 		System.out.println("检查完毕");
 		System.out.println("总数量:" + listFiles.length + ", 成功:" + success + ", 失败:" + fail);
 	}
-	
+
+	private static void ZCCode() {
+		try{
+			String baseDir = "D:\\code\\ZCCode";
+			new File(baseDir, "qrcode").mkdirs();
+			new File(baseDir, "check").mkdirs();
+			// 创建
+			createZCCode(baseDir);
+			// 检查
+			checkZCCode(baseDir);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	private static void createZCCode(String baseDir) throws Exception {
+		BufferedReader br = new BufferedReader(new FileReader(new File(baseDir, "code.txt")));
+		String url;
+		while ((url = br.readLine()) != null) {
+			String[] split = url.split("\t");
+			url = url.replaceAll("\t", "/");
+			File file = new File(baseDir, "qrcode\\" + split[0] + "_" + split[1] + ".pdf");
+			if (file.exists()) {
+				System.out.println("重复：" + file.getAbsolutePath());
+			}
+			ZxingHandler.createPDFQRCodeNew(file, url, url);
+		}
+		br.close();
+	}
+
+	private static void checkZCCode(String baseDir) throws Exception {
+		File file = new File(baseDir, "qrcode");
+		File[] listFiles = file.listFiles();
+		int success = 0;
+		int fail = 0;
+		for (File item : listFiles) {
+			String fileName = item.getName();
+			fileName = fileName.replace(".pdf", "");
+			String[] split = fileName.split("_");
+			String localId = split[0] + "/" + split[1];
+
+			File out = new File(baseDir, "check\\" + fileName + ".bmp");
+			if (out.exists()) {
+				out.delete();
+			}
+			out.createNewFile();
+			PDF2Image.pdfToImage(item.getAbsolutePath(), out.getAbsolutePath());
+
+			String readQrCode = readQrCode(new FileInputStream(out));
+			if (localId.equals(readQrCode)) {
+				success++;
+				out.delete();
+			} else {
+				fail++;
+				System.out.println("id不一致:(" + localId + "), (" + readQrCode + ")");
+			}
+		}
+		System.out.println("检查完毕");
+		System.out.println("总数量:" + listFiles.length + ", 成功:" + success + ", 失败:" + fail);
+	}
+
 }

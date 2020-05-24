@@ -264,8 +264,8 @@ public class ZxingHandler {
 		}
 	}
 
-	public static void createPDFQRCodeForPAHW(File file, String content, String title) {
-		Font font = new Font("宋体", Font.PLAIN, 5);
+	public static void createPDFQRCodeNew(File file, String content, String title) {
+		Font font = new Font("宋体", Font.PLAIN, 2);
 		// 设置二维码的大小 默认是300px
 		int qrcodeSize = 21;
 		// 每格大小
